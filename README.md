@@ -121,7 +121,7 @@ Note how the blue components are completely isolated from green, overlapping IP 
 
 ![](images/2023-03-31-16-32-27.png)
 
-- This is where the Palo Alto NVA gets its chance to inspect/block/audit/log the traffic based on its centrally controlled configuration. We can login to he PAN-OS GUI and verify that we are able to allow/deny traffic destined to our Web Application, as well as log/inspect the traffic flows.
+- This is where the Palo Alto NVA gets its chance to inspect/block/audit/log the traffic based on its centrally controlled configuration. We can login to the PAN-OS GUI and verify that we are able to allow/deny traffic destined to our Web Application, as well as log/inspect the traffic flows.
 
 ![](images/2023-03-31-16-36-32.png)
 
