@@ -1,7 +1,24 @@
 # Azure Gateway Load Balancer Service Chaining
 
-Contents here
+<!-- TOC -->
 
+- [Azure Gateway Load Balancer Service Chaining](#azure-gateway-load-balancer-service-chaining)
+- [Introduction](#introduction)
+- [Azure Networking native options](#azure-networking-native-options)
+- [Enter Azure Gateway Load Balancer](#enter-azure-gateway-load-balancer)
+- [Solution example (Palo Alto + HAProxy )](#solution-example-palo-alto--haproxy-)
+    - [Before GWLB (HAProxy only)](#before-gwlb-haproxy-only)
+        - [Overview](#overview)
+        - [Traffic flow](#traffic-flow)
+        - [Summary](#summary)
+    - [After GWLB (Palo Alto + HAProxy)](#after-gwlb-palo-alto--haproxy)
+        - [Overview](#overview)
+        - [Build Palo Alto/GWLB layer](#build-palo-altogwlb-layer)
+        - [Updated traffic flow](#updated-traffic-flow)
+        - [Summary](#summary)
+- [Additional reading](#additional-reading)
+
+<!-- /TOC -->
 
 # Introduction
 
@@ -120,4 +137,3 @@ The App team retains control over their own destiny (maybe the WAF policy that i
 
 - Jose Moreno published an excellent blog - [What language does the Azure Gateway Load Balancer speak?](https://blog.cloudtrooper.net/2021/11/11/what-language-does-the-azure-gateway-load-balancer-speak/) - where he goes deeper on the transport layer, and gives you the opportunity to "become the NVA vendor" with his Linux based NVA (and associated AZ CLI scripts).
 
--
