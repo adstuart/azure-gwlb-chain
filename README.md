@@ -119,3 +119,4 @@ The App team retains control over their own destiny (maybe the WAF policy that i
 # Additional reading
 
 - Jose Moreno published an excellent blog - [What language does the Azure Gateway Load Balancer speak?](https://blog.cloudtrooper.net/2021/11/11/what-language-does-the-azure-gateway-load-balancer-speak/) - where he goes deeper on the transport layer, and gives you the opportunity to "become the NVA vendor" with his Linux based NVA (and associated AZ CLI scripts).
+
