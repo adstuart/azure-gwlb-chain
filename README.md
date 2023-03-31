@@ -135,7 +135,7 @@ Note how the blue components are completely isolated from green, overlapping IP 
 
 ### Summary
 
-The App team retains control over their own destiny (maybe the WAF policy that is pushed out to the Reverse-proxy is centrally managed), but they are free to add new front-ends etc. Traffic still enters a via an Azure Standard Load Balancer in their VNet. GWLB integration intercepts the packet and transparently steers this to a central managed layer of Palo Alto Firewalls that can perform NextGen functions, prior to passing back to the green WAF layer.
+The App team retains control over their own destiny (maybe the WAF policy that is pushed out to the Reverse-proxy is centrally managed), but they are free to add new front-ends etc. Traffic still enters via an Azure Standard Load Balancer in their VNet. GWLB integration intercepts the packet and transparently steers this to a centrally-managed layer of Palo Alto Firewalls that can perform NextGen FW functions, prior to passing back to the green WAF layer.
 
 # Additional reading
 
