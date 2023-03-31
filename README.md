@@ -107,7 +107,7 @@ The App team has control over their own destiny (maybe the WAF policy that is pu
 
 ### Build Palo Alto/GWLB layer
 
-[This](https://docs.paloaltonetworks.com/vm-series/11-0/vm-series-deployment/set-up-the-vm-series-firewall-on-azure/deploy-the-vm-series-firewall-with-the-azure-gwlb) guide and ARM template can be used to build out the Palo Alto Firewall functional block. The main different in our design (vs the linked Palo Alto scenario), is that the Standard ALB Frontend IP that we map to our GWLB is _not_ our application backend, but rather, the ALB that fronts our layer of HAProxy appliances. 
+[This](https://docs.paloaltonetworks.com/vm-series/11-0/vm-series-deployment/set-up-the-vm-series-firewall-on-azure/deploy-the-vm-series-firewall-with-the-azure-gwlb) guide and ARM template can be used to build out the Palo Alto Firewall functional block. The main difference in our design (vs the linked Palo Alto scenario), is that the Standard ALB Frontend IP that we map to our GWLB is _not_ our application backend, but rather, the ALB that fronts our layer of HAProxy appliances. 
 
 Note how the blue components are completely isolated from green, overlapping IP exist in my lab, and this is not an issue due to the transposition happening entirely within the layers of the Azure SDN below that of the customer VNet address space(s).
 
@@ -130,6 +130,8 @@ Note how the blue components are completely isolated from green, overlapping IP 
 - If the Palo Alto Firewall layer allows the traffic, then the traffic egresses from the PA NVA via the VXLAN trust tunnel, returns via the unraveling of Blue GWLB to Green SLB to one of the HAProxy VMs. They receive the traffic sourced from 92.237.232.141 as if nothing happened, and ultimately pass this to the backend web farm as before.
 
 ![](images/2023-03-31-16-05-29.png)
+
+> Notice how we did _not_ have to SNAT on the Palo Alto NVA to ensure flow return symmetry. This is another one of the bug selling points of Azure Gateway Load Balancer vs traditional NVA insertion designs (aka load balancer sandwich).
 
 ### Summary
 
