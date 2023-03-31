@@ -48,12 +48,12 @@ The product page alludes to a unique benefit of GWLB "_Integrate virtual applian
 Notice how in the above description I am referring to the multiple layers as functional blocks "Firewall" and "WAF", this is where we need to call out some existing platform details.
 
 - _Azure Firewall_ does not yet have support to fulfill the "Firewall" block in this architecture, I.e. you cannot leverage AZFW today as the GWLB backend. This is planned.
-- _Application Gateway_ does not have support to fulfill the "WAF" block in this architecture, I.e. you cannot leverage APGW today pointing at the GWLB frontend. This is planned. 
+- _Application Gateway_ does not have support to fulfill the "WAF" block in this architecture, I.e. you cannot insert GWLB today prior to the APGW FrontEnd IP. This is planned. 
 
-Therefore as of today, this article is aimed at those customers wishing to implement this pattern using third party appliances. E.g.
+Therefore as of today, this article is aimed at those customers wishing to implement this pattern using third party appliances. Example vendors include:
 
-- WAF & L7 reverse-proxy: NGINX, F5, HAProxy, Kemp, etc
-- Firewall: Palo Alto, Fortinet, Cisco, etc
+- WAF & L7 reverse-proxy: _NGINX, F5, HAProxy, Kemp, etc_
+- Firewall: _Palo Alto, Fortinet, Cisco, etc_
 
 # Solution example (Palo Alto + HAProxy )
 
@@ -75,7 +75,7 @@ Therefore as of today, this article is aimed at those customers wishing to imple
 ![](images/2023-03-31-15-30-16.png)
 ![](images/2023-03-31-15-30-31.png)
 
-- HAProxy VMs, that represent our layer of app-team-managed WAF/proxy both contain basic config in our lab that takes the inbound request, inserts XFF header, then polls the actual web-backend servers of 10.0.0.4 and 10.0.0.5
+- HAProxy VMs, that represent our layer of app-team-managed WAF/proxy both contain basic config in our lab that takes the inbound request, inserts XFF header, then polls the actual web-backend servers of 10.0.0.4 and 10.0.0.5 for reachability, before sending the traffic to one of them.
 
 ```
 cat /etc/haproxy/haproxy.cfg
@@ -93,6 +93,8 @@ backend http_back
 
 ![](images/2023-03-31-16-05-29.png)
 
+> Note. SRC = 10.0.0.6 = SNAT of HAProxy. DST = 10.0.0.4 = NIC of Web Server. XFF = Client.
+
 ### Summary
 
 The App team has control over their own destiny (maybe the WAF policy that is pushed out to the Reverse-proxy is centrally managed), but they are free to add new front-ends etc. Traffic enters a via an Azure Standard Load Balancer in their VNet. The backend Web-Servers log requests that contain the XFF of the originating client.
@@ -105,7 +107,7 @@ The App team has control over their own destiny (maybe the WAF policy that is pu
 
 ### Build Palo Alto/GWLB layer
 
-[This](https://docs.paloaltonetworks.com/vm-series/11-0/vm-series-deployment/set-up-the-vm-series-firewall-on-azure/deploy-the-vm-series-firewall-with-the-azure-gwlb) guide and ARM template can be used to build out the Palo Alto Firewall functional block. The main addition in our design, is that the Standard ALB Frontend IP that we map to our GWLB is _not_ our application backend, but rather, the ALB that fronts our layer of HAProxy appliances. 
+[This](https://docs.paloaltonetworks.com/vm-series/11-0/vm-series-deployment/set-up-the-vm-series-firewall-on-azure/deploy-the-vm-series-firewall-with-the-azure-gwlb) guide and ARM template can be used to build out the Palo Alto Firewall functional block. The main different in our design (vs the linked Palo Alto scenario), is that the Standard ALB Frontend IP that we map to our GWLB is _not_ our application backend, but rather, the ALB that fronts our layer of HAProxy appliances. 
 
 Note how the blue components are completely isolated from green, overlapping IP exist in my lab, and this is not an issue due to the transposition happening entirely within the layers of the Azure SDN below that of the customer VNet address space(s).
 
@@ -115,7 +117,7 @@ Note how the blue components are completely isolated from green, overlapping IP 
 
 ![](images/2023-03-31-16-29-44.png)
 
-- Traffic is now steered to our blue GWLB, and ultimately Palo Alto NVA 01 or 02 thanks to the basic backend/rule/probe config. The only interesting/new bit here, is the SKU being Gateway Load Balancer (rather than Standard), along with the VXLAN config within the BackendPool.
+- Traffic is now steered to our blue GWLB, and ultimately Palo Alto NVA 01 or 02, thanks to the basic backend/rule/probe config. The only interesting/new bit here, is the SKU being Gateway Load Balancer (rather than Standard), along with the VXLAN config within the BackendPool.
 
 ![](images/2023-03-31-16-32-27.png)
 
@@ -125,7 +127,7 @@ Note how the blue components are completely isolated from green, overlapping IP 
 
 ![](images/2023-03-31-16-40-56.png)
 
-- If the Palo Alto Firewall layer allows the traffic, then the traffic egresses from the PA NVA via the VXLAN trust tunnel, returns via the unraveling to Blue GWLB to Green SLB to one of the HAProxy VMs. They receive the traffic sourced from 92.237.232.141 as if nothing happened, and ultimately pass this to the backend web farm as before.
+- If the Palo Alto Firewall layer allows the traffic, then the traffic egresses from the PA NVA via the VXLAN trust tunnel, returns via the unraveling of Blue GWLB to Green SLB to one of the HAProxy VMs. They receive the traffic sourced from 92.237.232.141 as if nothing happened, and ultimately pass this to the backend web farm as before.
 
 ![](images/2023-03-31-16-05-29.png)
 
@@ -135,5 +137,5 @@ The App team retains control over their own destiny (maybe the WAF policy that i
 
 # Additional reading
 
-- Jose Moreno published an excellent blog - [What language does the Azure Gateway Load Balancer speak?](https://blog.cloudtrooper.net/2021/11/11/what-language-does-the-azure-gateway-load-balancer-speak/) - where he goes deeper on the transport layer, and gives you the opportunity to "become the NVA vendor" with his Linux based NVA (and associated AZ CLI scripts).
+- Jose Moreno published an excellent blog - [What language does the Azure Gateway Load Balancer speak?](https://blog.cloudtrooper.net/2021/11/11/what-language-does-the-azure-gateway-load-balancer-speak/) - where he goes deeper on the transport layer, and gives you the opportunity to "_become the NVA vendor_" with his Linux based NVA (and associated AZ CLI scripts).
 
