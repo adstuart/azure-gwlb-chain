@@ -131,7 +131,7 @@ Note how the blue components are completely isolated from green, overlapping IP 
 
 ![](images/2023-03-31-16-05-29.png)
 
-> Notice how we did _not_ have to SNAT on the Palo Alto NVA to ensure flow return symmetry. This is another one of the bug selling points of Azure Gateway Load Balancer vs traditional NVA insertion designs (aka load balancer sandwich).
+> Notice how we did _not_ have to SNAT on the Palo Alto NVA to ensure flow return symmetry. This is another one of the selling points of Azure Gateway Load Balancer vs traditional NVA insertion designs (aka load balancer sandwich).
 
 ### Summary
 
