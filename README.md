@@ -47,8 +47,8 @@ The product page alludes to a unique benefit of GWLB "_Integrate virtual applian
 
 Notice how in the above description I am referring to the multiple layers as functional blocks "Firewall" and "WAF", this is where we need to call out some existing platform details.
 
-- _Azure Firewall_ does not yet have support to fulfill the "Firewall" block in this architecture, I.e. you cannot leverage AZFW today as the GWLB backend. This is planned.
-- _Application Gateway_ does not have support to fulfill the "WAF" block in this architecture, I.e. you cannot insert GWLB today prior to the APGW FrontEnd IP. This is planned. 
+- _Azure Firewall_ does not yet have support to fulfill the "Firewall" block in this architecture, I.e. you cannot leverage AZFW today as the GWLB backend.
+- _Application Gateway_ does not have support to fulfill the "WAF" block in this architecture, I.e. you cannot insert GWLB today prior to the APGW FrontEnd IP. 
 
 Therefore as of today, this article is aimed at those customers wishing to implement this pattern using third party appliances. Example vendors include:
 
