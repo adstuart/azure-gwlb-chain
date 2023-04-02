@@ -55,6 +55,8 @@ Therefore as of today, this article is aimed at those customers wishing to imple
 - WAF & L7 reverse-proxy: _NGINX, F5, HAProxy, Kemp, etc_
 - Firewall: _Palo Alto, Fortinet, Cisco, etc_
 
+> Note that any vendor used for the "Firewall" block must support VXLAN and ideally have done the work to integrate with the Azure GWLB APIs to provide a reference architecture. A full list of such companies is available [here](https://learn.microsoft.com/en-us/azure/load-balancer/gateway-partners).
+
 # Solution example (Palo Alto + HAProxy )
 
 ## Before GWLB (HAProxy only)
