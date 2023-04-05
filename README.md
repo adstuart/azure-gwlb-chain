@@ -37,6 +37,8 @@ After digesting the above content, a common pattern will often bubble to the sur
 
 Whilst providing some beneficial technical attributes, the above design pattern does pose some challenges if you have democratized the "reverse proxy" layer. I.e. if your Application Gateway's sit within Spokes (maybe even with [AKS integration](https://learn.microsoft.com/en-us/azure/application-gateway/ingress-controller-overview)). Another way of saying this; its complex/expensive/impractical to route traffic via a centralized IT-controlled Next-Gen Firewall if your WAF is not also controlled centrally.
 
+> Here is an MS community blog deepdiving on the above pattern including cert management https://techcommunity.microsoft.com/t5/azure-network-security-blog/zero-trust-with-azure-network-security/ba-p/3668280
+
 # Enter Azure Gateway Load Balancer
 
 Azure Gateway Load Balancer (GWLB) has been GA since July 2022, please check out the official [product page](https://learn.microsoft.com/en-us/azure/load-balancer/gateway-overview) to obtain the basic overview. 
